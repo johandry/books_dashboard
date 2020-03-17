@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import pandas as pd
 
-baseDir = "../Books"
 defOutFilename = 'books_db'
 
 # the following filenames and extensions are not from books
@@ -86,7 +86,7 @@ class Books:
 
     return filename
 
-def main():
+def main(baseDir):
   books = Books(baseDir)
   books.collect()
   fname = books.to_csv()
@@ -94,5 +94,20 @@ def main():
   fname = books.export_non_books()
   print(f'Non books saved to {fname}')
 
+def help(prog_name):
+  h = (
+    'usage: '+prog_name+' <books_directory> \n'
+    '\n'
+    'Creates the books dashboard as CSV and HTML. It also reports all the files that are not books.\n'
+    'where:\n'
+    'books_directory: is the base directory for all the books'
+  )
+  print(h)
+  sys.exit(1)
+
 if __name__ == "__main__":
-  main()
+  if len(sys.argv) <= 1:
+    help(sys.argv[0])
+  baseDir = sys.argv[1]
+
+  main(baseDir)
